@@ -8,14 +8,14 @@
   <style>
     *{box-sizing:border-box}
     body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Tahoma,sans-serif;background:#f2f7f5;color:#17332b}
-    .wrap{max-width:520px;margin:0 auto;padding:22px 16px 44px}
-    .top{padding:10px 2px}
-    .eyebrow{font-size:13px;color:#61776f;margin-bottom:5px}
-    h1{font-size:23px;margin:0}
+    .wrap{max-width:520px;margin:0 auto;padding:20px 16px 44px}
+    .top{padding:8px 2px 6px}
+    .eyebrow{font-size:13px;color:#61776f;margin-bottom:5px;line-height:1.5}
+    h1{font-size:24px;margin:0}
     .card{background:#fff;border-radius:20px;padding:22px;margin-top:16px;box-shadow:0 10px 28px rgba(28,62,52,.08)}
     .profile{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #edf1ef}
     .avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e6eeeb}
-    .fallback{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#e6eeeb;font-weight:800}
+    .fallback{width:52px;height:52px;border-radius:50%;display:none;align-items:center;justify-content:center;background:#e6eeeb;font-weight:800}
     .pname{font-weight:800;font-size:18px}
     .ok{font-size:12px;color:#14734d;margin-top:2px}
     .title{font-size:19px;font-weight:800;margin:20px 0 6px}
@@ -24,17 +24,19 @@
     input{width:100%;padding:13px 14px;border:1px solid #cfdad6;border-radius:12px;font-size:16px;outline:none}
     input:focus{border-color:#19815f;box-shadow:0 0 0 3px rgba(25,129,95,.1)}
     .btn{width:100%;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:800;cursor:pointer;margin-top:18px;background:#176b52;color:#fff}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
     .notice{margin-top:14px;background:#fff8e8;color:#755c1b;padding:12px 13px;border-radius:12px;font-size:13px;line-height:1.6}
-    .error{display:none;margin-top:14px;background:#fff1f1;color:#9d2d2d;padding:12px;border-radius:12px;font-size:14px}
-    .demo{margin-top:16px;padding:12px;border:1px dashed #b8c9c3;border-radius:12px;font-size:13px;color:#5f746d;line-height:1.6}
+    .error{display:none;margin-top:14px;background:#fff1f1;color:#9d2d2d;padding:12px;border-radius:12px;font-size:14px;line-height:1.5}
     .dash{display:none}
-    .member-name{font-size:21px;font-weight:900;margin:4px 0}
+    .member-name{font-size:22px;font-weight:900;margin:4px 0}
     .member-no{color:#6c8179;font-size:14px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-    .metric{padding:15px;border-radius:15px;background:#f5f9f7}
+    .metric{padding:15px;border-radius:15px;background:#f5f9f7;min-height:94px}
     .metric .k{font-size:13px;color:#667b74}
-    .metric .v{font-size:18px;font-weight:900;margin-top:6px}
+    .metric .v{font-size:18px;font-weight:900;margin-top:6px;word-break:break-word}
+    .metric.full{grid-column:1 / -1}
     .muted{font-size:12px;color:#86968f;margin-top:16px;line-height:1.6}
+    .back{background:#eef5f2;color:#176b52;margin-top:12px}
   </style>
 </head>
 <body>
@@ -47,7 +49,7 @@
   <section class="card" id="verifyCard">
     <div class="profile">
       <img id="avatar" class="avatar" alt="รูปโปรไฟล์" style="display:none">
-      <div id="fallback" class="fallback" style="display:none">สก.</div>
+      <div id="fallback" class="fallback">สก.</div>
       <div>
         <div class="pname" id="lineName">กำลังเชื่อมต่อ...</div>
         <div class="ok" id="lineStatus">กำลังตรวจสอบ LINE</div>
@@ -55,46 +57,57 @@
     </div>
 
     <div class="title">ยืนยันตัวตนสมาชิก</div>
-    <p class="sub">กรอกข้อมูลเพื่อเชื่อมบัญชี LINE กับสมาชิกสหกรณ์ ก่อนเข้าสู่ข้อมูลหุ้น เงินฝาก และเงินกู้</p>
+    <p class="sub">กรอกเลขสมาชิกและ PIN ทดสอบ เพื่อดึงข้อมูลจาก Google Sheet</p>
 
     <label for="memberNo">เลขสมาชิก</label>
-    <input id="memberNo" inputmode="numeric" maxlength="10" placeholder="เช่น 00125">
+    <input id="memberNo" inputmode="numeric" maxlength="10" placeholder="เช่น 00125" autocomplete="off">
 
-    <label for="last4">เลขบัตรประชาชน 4 หลักสุดท้าย</label>
-    <input id="last4" inputmode="numeric" maxlength="4" placeholder="กรอก 4 หลักสุดท้าย">
+    <label for="pin4">PIN 4 หลัก</label>
+    <input id="pin4" inputmode="numeric" maxlength="4" type="password" placeholder="กรอก PIN 4 หลัก" autocomplete="off">
 
-    <button class="btn" id="verifyBtn">ยืนยันตัวตน</button>
+    <button class="btn" id="verifyBtn">ตรวจสอบข้อมูล</button>
     <div class="error" id="errorBox"></div>
 
     <div class="notice">
-      เวอร์ชันนี้เป็นระบบทดสอบ ยังไม่เชื่อมฐานข้อมูลจริง กรุณาอย่าใช้เลขบัตรประชาชนจริงในขั้นทดลองนี้
-    </div>
-
-    <div class="demo">
-      <b>ข้อมูลทดสอบ:</b><br>
-      เลขสมาชิก 00125<br>
-      เลขบัตร 4 หลักสุดท้าย 1234
+      ระบบนี้ยังเป็นต้นแบบทดสอบ กรุณาใช้เฉพาะข้อมูลจำลอง และอย่าใส่เลขบัตรประชาชนหรือข้อมูลการเงินจริงในขั้นนี้
     </div>
   </section>
 
   <section class="card dash" id="dashCard">
     <div class="title" style="margin-top:0">ข้อมูลสมาชิก</div>
-    <div class="member-name">นายสมชาย ใจดี</div>
-    <div class="member-no">สมาชิกเลขที่ 00125</div>
+    <div class="member-name" id="fullName">-</div>
+    <div class="member-no">สมาชิกเลขที่ <span id="memberNoOut">-</span></div>
 
     <div class="grid">
-      <div class="metric"><div class="k">หุ้น</div><div class="v">12,500 หุ้น</div></div>
-      <div class="metric"><div class="k">เงินฝาก</div><div class="v">85,420.50 บาท</div></div>
-      <div class="metric"><div class="k">ยอดเงินกู้</div><div class="v">450,000 บาท</div></div>
-      <div class="metric"><div class="k">เงินกู้คงเหลือ</div><div class="v">327,850 บาท</div></div>
+      <div class="metric"><div class="k">หุ้น</div><div class="v" id="shares">-</div></div>
+      <div class="metric"><div class="k">เงินฝาก</div><div class="v" id="deposits">-</div></div>
+      <div class="metric"><div class="k">ยอดเงินกู้</div><div class="v" id="loanTotal">-</div></div>
+      <div class="metric"><div class="k">เงินกู้คงเหลือ</div><div class="v" id="loanBalance">-</div></div>
+      <div class="metric full"><div class="k">ผ่อนชำระต่องวด</div><div class="v" id="installment">-</div></div>
     </div>
 
-    <div class="muted">ข้อมูลทั้งหมดในหน้านี้เป็นข้อมูลตัวอย่างสำหรับทดสอบหน้าจอเท่านั้น</div>
+    <button class="btn back" id="backBtn">กลับไปตรวจสมาชิกคนอื่น</button>
+    <div class="muted">ข้อมูลหน้านี้ดึงจาก Google Sheet ผ่าน Google Apps Script สำหรับการทดสอบระบบ</div>
   </section>
 </main>
 
 <script>
 const LIFF_ID = "2011752168-pyUAW8vD";
+const API_URL = "https://script.google.com/macros/s/AKfycbxfjJ1KljziRQUMb_XNiTMM11Dre9ggzN8Obxx9Nh76aPYJnwJ17bFPy7PPvphNP5Jhtg/exec";
+
+function formatMoney(value) {
+  const raw = String(value ?? "").replace(/,/g, "").trim();
+  const n = Number(raw);
+  if (!raw || Number.isNaN(n)) return value || "-";
+  return new Intl.NumberFormat("th-TH", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(n) + " บาท";
+}
+
+function formatShares(value) {
+  const raw = String(value ?? "").replace(/,/g, "").trim();
+  const n = Number(raw);
+  if (!raw || Number.isNaN(n)) return value || "-";
+  return new Intl.NumberFormat("th-TH", {maximumFractionDigits: 2}).format(n) + " หุ้น";
+}
 
 async function initLiff() {
   const lineName = document.getElementById("lineName");
@@ -118,26 +131,106 @@ async function initLiff() {
       fallback.style.display = "flex";
     }
   } catch (e) {
-    lineName.textContent = "เชื่อมต่อ LINE ไม่สำเร็จ";
+    lineName.textContent = "เปิดระบบสมาชิก";
     lineStatus.textContent = "กรุณาเปิดผ่าน LIFF URL";
     fallback.style.display = "flex";
   }
 }
 
-document.getElementById("verifyBtn").addEventListener("click", () => {
-  const memberNo = document.getElementById("memberNo").value.trim();
-  const last4 = document.getElementById("last4").value.trim();
-  const errorBox = document.getElementById("errorBox");
+function jsonpRequest(memberNo, pin4) {
+  return new Promise((resolve, reject) => {
+    const cb = "__coop_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+    const script = document.createElement("script");
+    let timer;
 
-  if (memberNo === "00125" && last4 === "1234") {
-    errorBox.style.display = "none";
+    const cleanup = () => {
+      clearTimeout(timer);
+      delete window[cb];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    };
+
+    window[cb] = (data) => {
+      cleanup();
+      resolve(data);
+    };
+
+    const qs = new URLSearchParams({
+      member_no: memberNo,
+      pin4: pin4,
+      callback: cb
+    });
+
+    script.src = API_URL + "?" + qs.toString();
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("เชื่อมต่อ Google Apps Script ไม่สำเร็จ"));
+    };
+
+    timer = setTimeout(() => {
+      cleanup();
+      reject(new Error("หมดเวลารอข้อมูล กรุณาลองใหม่"));
+    }, 15000);
+
+    document.body.appendChild(script);
+  });
+}
+
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  const memberNo = document.getElementById("memberNo").value.trim();
+  const pin4 = document.getElementById("pin4").value.trim();
+  const errorBox = document.getElementById("errorBox");
+  const btn = document.getElementById("verifyBtn");
+
+  errorBox.style.display = "none";
+
+  if (!memberNo || !/^\d+$/.test(memberNo)) {
+    errorBox.textContent = "กรุณากรอกเลขสมาชิกให้ถูกต้อง";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  if (!/^\d{4}$/.test(pin4)) {
+    errorBox.textContent = "กรุณากรอก PIN 4 หลัก";
+    errorBox.style.display = "block";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "กำลังตรวจสอบ...";
+
+  try {
+    const data = await jsonpRequest(memberNo, pin4);
+
+    if (!data || !data.success || !data.member) {
+      throw new Error((data && data.message) || "ไม่พบข้อมูลสมาชิก");
+    }
+
+    const m = data.member;
+    document.getElementById("fullName").textContent = m.full_name || "-";
+    document.getElementById("memberNoOut").textContent = m.member_no || "-";
+    document.getElementById("shares").textContent = formatShares(m.shares);
+    document.getElementById("deposits").textContent = formatMoney(m.deposits);
+    document.getElementById("loanTotal").textContent = formatMoney(m.loan_total);
+    document.getElementById("loanBalance").textContent = formatMoney(m.loan_balance);
+    document.getElementById("installment").textContent = formatMoney(m.installment);
+
     document.getElementById("verifyCard").style.display = "none";
     document.getElementById("dashCard").style.display = "block";
     window.scrollTo({top:0, behavior:"smooth"});
-  } else {
-    errorBox.textContent = "ข้อมูลทดสอบไม่ถูกต้อง กรุณาใช้เลขสมาชิก 00125 และเลข 4 หลัก 1234";
+  } catch (err) {
+    errorBox.textContent = err.message || "เกิดข้อผิดพลาด กรุณาลองใหม่";
     errorBox.style.display = "block";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "ตรวจสอบข้อมูล";
   }
+});
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  document.getElementById("dashCard").style.display = "none";
+  document.getElementById("verifyCard").style.display = "block";
+  document.getElementById("pin4").value = "";
+  window.scrollTo({top:0, behavior:"smooth"});
 });
 
 initLiff();
