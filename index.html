@@ -1,128 +1,389 @@
 <!doctype html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ระบบสมาชิกสหกรณ์พระบาทห้วยต้ม</title>
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<style>
-*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Tahoma,sans-serif;background:#f2f7f5;color:#17332b}
-.wrap{max-width:520px;margin:auto;padding:20px 16px 44px} .eyebrow{font-size:13px;color:#61776f} h1{font-size:24px;margin:5px 0 0}
-.card{background:#fff;border-radius:20px;padding:22px;margin-top:16px;box-shadow:0 10px 28px rgba(28,62,52,.08)}
-.profile{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #edf1ef} .avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e6eeeb}
-.pname{font-weight:800;font-size:18px} .ok{font-size:12px;color:#14734d;margin-top:2px}
-label{display:block;font-weight:700;font-size:14px;margin:14px 0 7px} input{width:100%;padding:13px 14px;border:1px solid #cfdad6;border-radius:12px;font-size:16px}
-button{width:100%;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:800;margin-top:18px;background:#176b52;color:#fff} button:disabled{opacity:.6}
-.error{display:none;margin-top:14px;background:#fff1f1;color:#9d2d2d;padding:12px;border-radius:12px} .dash{display:none}
-.name{font-size:22px;font-weight:900} .no{color:#6c8179;font-size:14px;margin-top:4px} .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-.metric{padding:15px;border-radius:15px;background:#f5f9f7} .k{font-size:13px;color:#667b74} .v{font-size:18px;font-weight:900;margin-top:6px}
-.full{grid-column:1/-1} .note{font-size:12px;color:#86968f;margin-top:16px;line-height:1.6}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ระบบสมาชิกสหกรณ์พระบาทห้วยต้ม</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    :root {
+      --blue:#1e73ea;
+      --blue2:#eaf4ff;
+      --green:#37b34a;
+      --orange:#ffad1f;
+      --purple:#8b5cf6;
+      --pink:#ef5da8;
+      --cyan:#25b7d3;
+      --navy:#17365d;
+      --ink:#203047;
+      --muted:#718096;
+      --card:#ffffff;
+      --bg1:#cfe8ff;
+      --bg2:#edf7ff;
+      --danger:#e84a5f;
+      --shadow:0 10px 28px rgba(48,93,140,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Tahoma,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255,255,255,.9), transparent 30%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+    }
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .app{max-width:520px;margin:0 auto;min-height:100vh;padding-bottom:30px}
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      display:flex;align-items:center;gap:10px;
+      padding:13px 16px;
+      background:rgba(216,237,255,.92);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(23,54,93,.08);
+    }
+    .brand-dot{
+      width:34px;height:34px;border-radius:50%;
+      background:linear-gradient(145deg,#13b76a,#057b4b);
+      display:grid;place-items:center;color:#fff;font-weight:900;
+      box-shadow:0 6px 14px rgba(5,123,75,.25);
+    }
+    .brand-title{font-weight:850;font-size:15px;line-height:1.2}
+    .brand-sub{font-size:11px;color:#58708d;margin-top:2px}
+    .screen{display:none;padding:14px 14px 24px}
+    .screen.active{display:block}
+    .bubble{
+      background:#fff;border-radius:18px 18px 18px 5px;
+      padding:16px 17px;box-shadow:var(--shadow);line-height:1.65;
+      margin:8px 0 14px;
+    }
+    .hero{
+      border-radius:22px;overflow:hidden;box-shadow:var(--shadow);
+      background:linear-gradient(135deg,#1f7bd8,#4ab0ff);
+      color:white;padding:18px;position:relative;
+    }
+    .hero:after{
+      content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+      right:-55px;top:-55px;background:rgba(255,255,255,.13);
+    }
+    .hero h1{font-size:22px;margin:0 0 4px}
+    .hero p{font-size:13px;margin:0;opacity:.92}
+    .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .menu-btn{
+      border:0;border-radius:17px;padding:18px 10px;color:#fff;
+      box-shadow:0 9px 20px rgba(32,48,71,.14);
+      min-height:105px;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:7px;font-weight:800;
+    }
+    .menu-btn .ico{font-size:30px;line-height:1}
+    .menu-btn.blue{background:linear-gradient(145deg,#2582f0,#1768d1)}
+    .menu-btn.green{background:linear-gradient(145deg,#49c95a,#269c3b)}
+    .menu-btn.orange{background:linear-gradient(145deg,#ffc13b,#f59a13)}
+    .menu-btn.purple{background:linear-gradient(145deg,#9a6df8,#7748df)}
+    .menu-btn.cyan{background:linear-gradient(145deg,#35c6df,#18a9ca)}
+    .menu-btn.pink{background:linear-gradient(145deg,#f06caf,#db438f)}
+    .section-title{font-weight:900;font-size:18px;margin:8px 2px 10px}
+    .panel{
+      background:#fff;border-radius:20px;padding:18px;
+      box-shadow:var(--shadow);margin-top:12px;
+    }
+    .profile-row{display:flex;align-items:center;gap:12px}
+    .avatar{width:58px;height:58px;border-radius:50%;object-fit:cover;background:#dbeafe;display:none}
+    .avatar-fallback{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#1f76e7;color:#fff;font-size:26px;font-weight:900}
+    .line-name{font-weight:900;font-size:18px}
+    .line-ok{font-size:12px;color:#168f52;margin-top:2px}
+    label{display:block;font-size:13px;font-weight:800;margin:15px 0 7px}
+    input{
+      width:100%;border:1px solid #d7e0eb;border-radius:12px;padding:13px 14px;
+      background:#fbfdff;font-size:16px;outline:none;
+    }
+    input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+    .primary{
+      width:100%;border:0;border-radius:12px;padding:14px 16px;
+      margin-top:16px;background:linear-gradient(135deg,#2c86f0,#1267d8);
+      color:#fff;font-weight:900;font-size:16px;
+    }
+    .secondary{
+      width:100%;border:1px solid #2c86f0;border-radius:12px;padding:12px 16px;
+      margin-top:10px;background:#fff;color:#1a6fd8;font-weight:800;
+    }
+    .error{display:none;background:#fff0f2;color:#b4233a;padding:11px 12px;border-radius:11px;margin-top:12px;font-size:13px}
+    .member-head{
+      display:flex;align-items:center;gap:12px;margin-bottom:12px
+    }
+    .member-photo{width:64px;height:64px;border-radius:50%;background:#1f76e7;color:white;display:grid;place-items:center;font-size:29px}
+    .member-name{font-size:21px;font-weight:950}
+    .member-no{font-size:13px;color:#6b7d92;margin-top:2px}
+    .summary-title{
+      background:linear-gradient(135deg,#2a83ed,#1766cf);color:#fff;
+      border-radius:10px;padding:9px 12px;text-align:center;font-weight:900;margin:8px 0 10px
+    }
+    .summary-list{display:grid;gap:9px}
+    .summary-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 3px;border-bottom:1px solid #edf1f5}
+    .summary-row:last-child{border-bottom:0}
+    .summary-left{display:flex;align-items:center;gap:9px;font-weight:750}
+    .mini-icon{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px}
+    .mini-icon.green{background:#48b64e}
+    .mini-icon.orange{background:#f7a719}
+    .mini-icon.purple{background:#8658e8}
+    .mini-icon.pink{background:#e54c84}
+    .summary-value{font-weight:900}
+    .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .quick{border:0;border-radius:13px;padding:13px 10px;color:#fff;font-weight:850}
+    .quick.green{background:#39ad47} .quick.orange{background:#ff9f0a}
+    .quick.purple{background:#8b5cf6} .quick.blue{background:#2578e6}
+    .money-card{background:#fff;border-radius:20px;padding:17px;box-shadow:var(--shadow);margin-top:12px}
+    .money-card h3{margin:0 0 12px;font-size:17px}
+    .big-number{font-size:28px;font-weight:950;color:#153b70}
+    .softbox{padding:13px;border-radius:12px;margin-top:10px}
+    .softbox.blue{background:#e9f4ff} .softbox.green{background:#eaf8ee}
+    .loan-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #edf1f5}
+    .loan-row strong{font-weight:900}
+    .remain{background:#ffe9ec;color:#c02d45;padding:12px;border-radius:11px;margin-top:10px;display:flex;justify-content:space-between;font-weight:900}
+    .more-list{background:#fff;border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+    .more-item{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #edf1f5}
+    .more-item:last-child{border-bottom:0}
+    .more-left{display:flex;align-items:center;gap:12px;font-weight:800}
+    .more-ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff}
+    .small-note{font-size:12px;color:#718096;line-height:1.6;margin-top:12px}
+    .back-link{border:0;background:transparent;color:#176bd6;font-weight:800;padding:6px 0;margin-bottom:8px}
+    .loading{opacity:.65;pointer-events:none}
+    @media(max-width:370px){.menu-btn{min-height:95px;padding:13px 8px}.menu-btn .ico{font-size:26px}}
+  </style>
 </head>
 <body>
-<main class="wrap">
-<div class="eyebrow">สหกรณ์การเกษตรโครงการหลวงพระบาทห้วยต้ม จำกัด</div>
-<h1>ระบบสมาชิกออนไลน์</h1>
-
-<section class="card" id="verifyCard">
-  <div class="profile">
-    <img id="avatar" class="avatar" style="display:none">
-    <div><div class="pname" id="lineName">กำลังเชื่อมต่อ...</div><div class="ok" id="lineStatus">กำลังตรวจสอบ LINE</div></div>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-dot">สก.</div>
+    <div>
+      <div class="brand-title">สหกรณ์การเกษตรโครงการหลวงพระบาทห้วยต้ม จำกัด</div>
+      <div class="brand-sub">บริการสมาชิกออนไลน์</div>
+    </div>
   </div>
-  <h2>ยืนยันตัวตนสมาชิก</h2>
-  <label>เลขสมาชิก</label>
-  <input id="memberNo" inputmode="numeric" placeholder="เช่น 00125">
-  <label>PIN 4 หลัก</label>
-  <input id="pin4" type="password" inputmode="numeric" maxlength="4" placeholder="PIN 4 หลัก">
-  <button id="verifyBtn">ตรวจสอบข้อมูล</button>
-  <div id="errorBox" class="error"></div>
-  <div class="note">ระบบทดสอบ: ใช้เฉพาะข้อมูลจำลองใน Google Sheet</div>
-</section>
 
-<section class="card dash" id="dashCard">
-  <div class="name" id="fullName"></div>
-  <div class="no">สมาชิกเลขที่ <span id="memberNoOut"></span></div>
-  <div class="grid">
-    <div class="metric"><div class="k">หุ้น</div><div class="v" id="shares"></div></div>
-    <div class="metric"><div class="k">เงินฝาก</div><div class="v" id="deposits"></div></div>
-    <div class="metric"><div class="k">ยอดเงินกู้</div><div class="v" id="loanTotal"></div></div>
-    <div class="metric"><div class="k">เงินกู้คงเหลือ</div><div class="v" id="loanBalance"></div></div>
-    <div class="metric full"><div class="k">ผ่อนชำระต่องวด</div><div class="v" id="installment"></div></div>
-  </div>
-  <button id="backBtn">กลับ</button>
-</section>
-</main>
+  <section class="screen active" id="homeScreen">
+    <div class="bubble">
+      สวัสดีครับ/ค่ะ<br>
+      ยินดีต้อนรับเข้าสู่บริการสมาชิกสหกรณ์<br>
+      คุณสามารถเลือกเมนูด้านล่างเพื่อใช้งานบริการต่าง ๆ ได้เลยครับ
+    </div>
+    <div class="hero">
+      <h1>บริการสมาชิก</h1>
+      <p>ตรวจสอบข้อมูลได้ง่าย สะดวก และเป็นส่วนตัว</p>
+    </div>
+    <div class="menu-grid">
+      <button class="menu-btn blue" onclick="goVerify()"><span class="ico">👤</span>ตรวจสอบข้อมูลของฉัน</button>
+      <button class="menu-btn green" onclick="requireMember('dashboard')"><span class="ico">📈</span>หุ้นของฉัน</button>
+      <button class="menu-btn orange" onclick="requireMember('deposit')"><span class="ico">🪙</span>เงินฝากของฉัน</button>
+      <button class="menu-btn purple" onclick="requireMember('loan')"><span class="ico">💳</span>เงินกู้ของฉัน</button>
+      <button class="menu-btn cyan" onclick="requireMember('dashboard')"><span class="ico">📋</span>รายการเคลื่อนไหว</button>
+      <button class="menu-btn pink" onclick="showScreen('moreScreen')"><span class="ico">•••</span>เมนูอื่น ๆ</button>
+    </div>
+  </section>
+
+  <section class="screen" id="verifyScreen">
+    <button class="back-link" onclick="showScreen('homeScreen')">‹ กลับหน้าแรก</button>
+    <div class="panel">
+      <div class="profile-row">
+        <img id="avatar" class="avatar">
+        <div id="avatarFallback" class="avatar-fallback">👤</div>
+        <div>
+          <div id="lineName" class="line-name">กำลังเชื่อมต่อ LINE...</div>
+          <div id="lineStatus" class="line-ok">กำลังตรวจสอบ</div>
+        </div>
+      </div>
+      <div class="section-title">ยืนยันตัวตนสมาชิก</div>
+      <label>เลขสมาชิก</label>
+      <input id="memberNo" inputmode="numeric" placeholder="เช่น 00125">
+      <label>PIN 4 หลัก</label>
+      <input id="pin4" type="password" inputmode="numeric" maxlength="4" placeholder="กรอก PIN 4 หลัก">
+      <button class="primary" id="verifyBtn" onclick="verifyMember()">ยืนยัน</button>
+      <div id="errorBox" class="error"></div>
+      <div class="small-note">ขณะนี้เป็นระบบทดสอบ กรุณาใช้เฉพาะข้อมูลจำลองก่อนนำข้อมูลจริงมาใช้งาน</div>
+    </div>
+  </section>
+
+  <section class="screen" id="dashboardScreen">
+    <button class="back-link" onclick="showScreen('homeScreen')">‹ เมนูหลัก</button>
+    <div class="panel">
+      <div class="member-head">
+        <div class="member-photo">👤</div>
+        <div>
+          <div class="member-name" id="dName">-</div>
+          <div class="member-no">สมาชิกเลขที่ <span id="dNo">-</span></div>
+        </div>
+      </div>
+      <div class="summary-title">สรุปข้อมูลสมาชิก</div>
+      <div class="summary-list">
+        <div class="summary-row"><div class="summary-left"><span class="mini-icon green">↗</span>หุ้น</div><div class="summary-value" id="dShares">-</div></div>
+        <div class="summary-row"><div class="summary-left"><span class="mini-icon orange">฿</span>เงินฝาก</div><div class="summary-value" id="dDeposits">-</div></div>
+        <div class="summary-row"><div class="summary-left"><span class="mini-icon purple">▣</span>ยอดเงินกู้</div><div class="summary-value" id="dLoan">-</div></div>
+        <div class="summary-row"><div class="summary-left"><span class="mini-icon pink">●</span>เงินกู้คงเหลือ</div><div class="summary-value" id="dBalance">-</div></div>
+      </div>
+      <div class="quick-grid">
+        <button class="quick green" onclick="showScreen('dashboardScreen')">📈 หุ้น</button>
+        <button class="quick orange" onclick="showScreen('depositScreen')">🪙 เงินฝาก</button>
+        <button class="quick purple" onclick="showScreen('loanScreen')">💳 เงินกู้</button>
+        <button class="quick blue" onclick="alert('รายการเคลื่อนไหวแบบละเอียดจะเพิ่มเมื่อมีชีต transactions')">📋 รายการเคลื่อนไหว</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="depositScreen">
+    <button class="back-link" onclick="showScreen('dashboardScreen')">‹ กลับสรุปข้อมูล</button>
+    <div class="money-card">
+      <h3>🪙 เงินฝากของฉัน</h3>
+      <div style="font-size:13px;color:#6b7d92">เงินฝากรวม</div>
+      <div class="big-number" id="depTotal">-</div>
+      <div class="softbox blue"><strong>บัญชีเงินฝากสมาชิก</strong><br><span id="depMain">-</span></div>
+      <div class="small-note">ขณะนี้แสดงยอดรวมจากชีต members ก่อน หากต้องการแยกหลายบัญชี สามารถเพิ่มชีต deposits ภายหลังได้</div>
+    </div>
+  </section>
+
+  <section class="screen" id="loanScreen">
+    <button class="back-link" onclick="showScreen('dashboardScreen')">‹ กลับสรุปข้อมูล</button>
+    <div class="money-card">
+      <h3>💳 เงินกู้ของฉัน</h3>
+      <div class="loan-row"><span>ยอดกู้เดิม</span><strong id="loanTotal2">-</strong></div>
+      <div class="loan-row"><span>ชำระแล้ว</span><strong id="loanPaid">-</strong></div>
+      <div class="remain"><span>คงเหลือ</span><span id="loanRemain">-</span></div>
+      <div class="softbox blue" style="margin-top:12px">
+        <div style="display:flex;justify-content:space-between"><span>งวดถัดไป</span><strong id="loanInstallment">-</strong></div>
+      </div>
+      <div class="small-note">เมื่อเพิ่มชีต loans ภายหลัง สามารถแสดงเลขสัญญา กำหนดชำระ และรายละเอียดแต่ละสัญญาได้</div>
+    </div>
+  </section>
+
+  <section class="screen" id="moreScreen">
+    <button class="back-link" onclick="showScreen('homeScreen')">‹ กลับหน้าแรก</button>
+    <div class="section-title">บริการเพิ่มเติม</div>
+    <div class="more-list">
+      <div class="more-item"><div class="more-left"><span class="more-ico" style="background:#2578e6">💰</span>ปันผล / เฉลี่ยคืน</div><span>›</span></div>
+      <div class="more-item"><div class="more-left"><span class="more-ico" style="background:#a4c639">📅</span>กำหนดการชำระเงิน</div><span>›</span></div>
+      <div class="more-item"><div class="more-left"><span class="more-ico" style="background:#29a9dd">📢</span>ข่าวสาร / ประกาศ</div><span>›</span></div>
+      <div class="more-item"><div class="more-left"><span class="more-ico" style="background:#2775d8">👤</span>ติดต่อเจ้าหน้าที่</div><span>›</span></div>
+      <div class="more-item"><div class="more-left"><span class="more-ico" style="background:#3478c8">?</span>คำถามที่พบบ่อย</div><span>›</span></div>
+    </div>
+  </section>
+</div>
 
 <script>
-const LIFF_ID="2011752168-pyUAW8vD";
-const API_URL="https://script.google.com/macros/s/AKfycbyd5Fy3HxTdAtibupIILWHUer0lCCJq-u8FVJDsvoYBY1PFkMVXvM3o2UKQaixL6obnDQ/exec";
+const LIFF_ID = "2011752168-pyUAW8vD";
+const API_URL = "https://script.google.com/macros/s/AKfycbyd5Fy3HxTdAtibupIILWHUer0lCCJq-u8FVJDsvoYBY1PFkMVXvM3o2UKQaixL6obnDQ/exec";
+let currentMember = null;
 
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goVerify() { showScreen('verifyScreen'); }
+
+function requireMember(target) {
+  if (!currentMember) {
+    goVerify();
+    return;
+  }
+  showScreen(target === 'deposit' ? 'depositScreen' : target === 'loan' ? 'loanScreen' : 'dashboardScreen');
+}
+
+function num(v) {
+  const n = Number(String(v ?? '').replace(/,/g,'').trim());
+  return Number.isFinite(n) ? n : 0;
+}
 function money(v) {
-  const n=Number(String(v??"").replace(/,/g,""));
-  return Number.isFinite(n) ? n.toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2})+" บาท" : (v||"-");
+  const n = num(v);
+  return n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})+' บาท';
 }
-function shares(v) {
-  const n=Number(String(v??"").replace(/,/g,""));
-  return Number.isFinite(n) ? n.toLocaleString("th-TH")+" หุ้น" : (v||"-");
+function sharesText(v) {
+  const n = num(v);
+  return n.toLocaleString('th-TH',{maximumFractionDigits:2})+' หุ้น';
 }
 
-async function initLiff(){
-  try{
+async function initLiff() {
+  try {
     await liff.init({liffId:LIFF_ID});
-    if(!liff.isLoggedIn()){liff.login();return;}
-    const p=await liff.getProfile();
-    document.getElementById("lineName").textContent=p.displayName||"สมาชิก LINE";
-    document.getElementById("lineStatus").textContent="เชื่อมต่อ LINE สำเร็จ";
-    if(p.pictureUrl){const a=document.getElementById("avatar");a.src=p.pictureUrl;a.style.display="block";}
-  }catch(e){
-    document.getElementById("lineName").textContent="ระบบสมาชิก";
-    document.getElementById("lineStatus").textContent="กรุณาเปิดผ่าน LINE";
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
+    }
+    const p = await liff.getProfile();
+    document.getElementById('lineName').textContent = p.displayName || 'สมาชิก LINE';
+    document.getElementById('lineStatus').textContent = 'เชื่อมต่อ LINE สำเร็จ';
+    if (p.pictureUrl) {
+      const img = document.getElementById('avatar');
+      img.src = p.pictureUrl;
+      img.style.display = 'block';
+      document.getElementById('avatarFallback').style.display='none';
+    }
+  } catch(e) {
+    document.getElementById('lineName').textContent = 'ระบบสมาชิก';
+    document.getElementById('lineStatus').textContent = 'กรุณาเปิดผ่าน LINE';
   }
 }
 
-function jsonp(memberNo,pin4){
+function jsonp(memberNo,pin4) {
   return new Promise((resolve,reject)=>{
-    const cb="coop_"+Date.now()+"_"+Math.floor(Math.random()*99999);
-    const s=document.createElement("script");
-    const cleanup=()=>{delete window[cb]; if(s.parentNode)s.parentNode.removeChild(s);};
-    window[cb]=(d)=>{cleanup();resolve(d);};
+    const cb='coop_'+Date.now()+'_'+Math.floor(Math.random()*99999);
+    const s=document.createElement('script');
+    const timer=setTimeout(()=>{cleanup();reject(new Error('หมดเวลารอข้อมูล กรุณาลองใหม่'));},15000);
+    function cleanup(){clearTimeout(timer);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);}
+    window[cb]=(data)=>{cleanup();resolve(data);};
     const q=new URLSearchParams({member_no:memberNo,pin4:pin4,callback:cb});
-    s.src=API_URL+"?"+q.toString();
-    s.onerror=()=>{cleanup();reject(new Error("เชื่อมต่อฐานข้อมูลไม่สำเร็จ"));};
+    s.src=API_URL+'?'+q.toString();
+    s.onerror=()=>{cleanup();reject(new Error('เชื่อมต่อฐานข้อมูลไม่สำเร็จ'));};
     document.body.appendChild(s);
   });
 }
 
-document.getElementById("verifyBtn").onclick=async()=>{
-  const memberNo=document.getElementById("memberNo").value.trim();
-  const pin4=document.getElementById("pin4").value.trim();
-  const err=document.getElementById("errorBox");
-  const btn=document.getElementById("verifyBtn");
-  err.style.display="none";
-  if(!memberNo || !/^\d{4}$/.test(pin4)){err.textContent="กรุณากรอกเลขสมาชิกและ PIN 4 หลัก";err.style.display="block";return;}
-  btn.disabled=true;btn.textContent="กำลังตรวจสอบ...";
-  try{
-    const d=await jsonp(memberNo,pin4);
-    if(!d.success) throw new Error(d.message||"ไม่พบข้อมูล");
-    const m=d.member;
-    document.getElementById("fullName").textContent=m.full_name;
-    document.getElementById("memberNoOut").textContent=m.member_no;
-    document.getElementById("shares").textContent=shares(m.shares);
-    document.getElementById("deposits").textContent=money(m.deposits);
-    document.getElementById("loanTotal").textContent=money(m.loan_total);
-    document.getElementById("loanBalance").textContent=money(m.loan_balance);
-    document.getElementById("installment").textContent=money(m.installment);
-    document.getElementById("verifyCard").style.display="none";
-    document.getElementById("dashCard").style.display="block";
-  }catch(e){err.textContent=e.message;err.style.display="block";}
-  finally{btn.disabled=false;btn.textContent="ตรวจสอบข้อมูล";}
-};
+async function verifyMember() {
+  const memberNo=document.getElementById('memberNo').value.trim();
+  const pin4=document.getElementById('pin4').value.trim();
+  const error=document.getElementById('errorBox');
+  const btn=document.getElementById('verifyBtn');
+  error.style.display='none';
 
-document.getElementById("backBtn").onclick=()=>{
-  document.getElementById("dashCard").style.display="none";
-  document.getElementById("verifyCard").style.display="block";
-  document.getElementById("pin4").value="";
-};
+  if(!memberNo || !/^\d{4}$/.test(pin4)) {
+    error.textContent='กรุณากรอกเลขสมาชิกและ PIN 4 หลัก';
+    error.style.display='block';
+    return;
+  }
+
+  btn.disabled=true;btn.textContent='กำลังตรวจสอบ...';
+  try {
+    const data=await jsonp(memberNo,pin4);
+    if(!data || !data.success || !data.member) throw new Error((data&&data.message)||'ไม่พบข้อมูลสมาชิก');
+    currentMember=data.member;
+    renderMember(currentMember);
+    showScreen('dashboardScreen');
+  } catch(e) {
+    error.textContent=e.message||'เกิดข้อผิดพลาด';
+    error.style.display='block';
+  } finally {
+    btn.disabled=false;btn.textContent='ยืนยัน';
+  }
+}
+
+function renderMember(m) {
+  document.getElementById('dName').textContent=m.full_name||'-';
+  document.getElementById('dNo').textContent=m.member_no||'-';
+  document.getElementById('dShares').textContent=sharesText(m.shares);
+  document.getElementById('dDeposits').textContent=money(m.deposits);
+  document.getElementById('dLoan').textContent=money(m.loan_total);
+  document.getElementById('dBalance').textContent=money(m.loan_balance);
+
+  document.getElementById('depTotal').textContent=money(m.deposits);
+  document.getElementById('depMain').textContent=money(m.deposits);
+
+  const paid=Math.max(0,num(m.loan_total)-num(m.loan_balance));
+  document.getElementById('loanTotal2').textContent=money(m.loan_total);
+  document.getElementById('loanPaid').textContent=money(paid);
+  document.getElementById('loanRemain').textContent=money(m.loan_balance);
+  document.getElementById('loanInstallment').textContent=money(m.installment);
+}
 
 initLiff();
 </script>
