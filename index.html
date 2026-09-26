@@ -1,237 +1,128 @@
 <!doctype html>
 <html lang="th">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>ระบบสมาชิกสหกรณ์พระบาทห้วยต้ม</title>
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <style>
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Tahoma,sans-serif;background:#f2f7f5;color:#17332b}
-    .wrap{max-width:520px;margin:0 auto;padding:20px 16px 44px}
-    .top{padding:8px 2px 6px}
-    .eyebrow{font-size:13px;color:#61776f;margin-bottom:5px;line-height:1.5}
-    h1{font-size:24px;margin:0}
-    .card{background:#fff;border-radius:20px;padding:22px;margin-top:16px;box-shadow:0 10px 28px rgba(28,62,52,.08)}
-    .profile{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #edf1ef}
-    .avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e6eeeb}
-    .fallback{width:52px;height:52px;border-radius:50%;display:none;align-items:center;justify-content:center;background:#e6eeeb;font-weight:800}
-    .pname{font-weight:800;font-size:18px}
-    .ok{font-size:12px;color:#14734d;margin-top:2px}
-    .title{font-size:19px;font-weight:800;margin:20px 0 6px}
-    .sub{font-size:14px;line-height:1.6;color:#667b74;margin:0 0 18px}
-    label{display:block;font-weight:700;font-size:14px;margin:14px 0 7px}
-    input{width:100%;padding:13px 14px;border:1px solid #cfdad6;border-radius:12px;font-size:16px;outline:none}
-    input:focus{border-color:#19815f;box-shadow:0 0 0 3px rgba(25,129,95,.1)}
-    .btn{width:100%;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:800;cursor:pointer;margin-top:18px;background:#176b52;color:#fff}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .notice{margin-top:14px;background:#fff8e8;color:#755c1b;padding:12px 13px;border-radius:12px;font-size:13px;line-height:1.6}
-    .error{display:none;margin-top:14px;background:#fff1f1;color:#9d2d2d;padding:12px;border-radius:12px;font-size:14px;line-height:1.5}
-    .dash{display:none}
-    .member-name{font-size:22px;font-weight:900;margin:4px 0}
-    .member-no{color:#6c8179;font-size:14px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-    .metric{padding:15px;border-radius:15px;background:#f5f9f7;min-height:94px}
-    .metric .k{font-size:13px;color:#667b74}
-    .metric .v{font-size:18px;font-weight:900;margin-top:6px;word-break:break-word}
-    .metric.full{grid-column:1 / -1}
-    .muted{font-size:12px;color:#86968f;margin-top:16px;line-height:1.6}
-    .back{background:#eef5f2;color:#176b52;margin-top:12px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ระบบสมาชิกสหกรณ์พระบาทห้วยต้ม</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Tahoma,sans-serif;background:#f2f7f5;color:#17332b}
+.wrap{max-width:520px;margin:auto;padding:20px 16px 44px} .eyebrow{font-size:13px;color:#61776f} h1{font-size:24px;margin:5px 0 0}
+.card{background:#fff;border-radius:20px;padding:22px;margin-top:16px;box-shadow:0 10px 28px rgba(28,62,52,.08)}
+.profile{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid #edf1ef} .avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e6eeeb}
+.pname{font-weight:800;font-size:18px} .ok{font-size:12px;color:#14734d;margin-top:2px}
+label{display:block;font-weight:700;font-size:14px;margin:14px 0 7px} input{width:100%;padding:13px 14px;border:1px solid #cfdad6;border-radius:12px;font-size:16px}
+button{width:100%;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:800;margin-top:18px;background:#176b52;color:#fff} button:disabled{opacity:.6}
+.error{display:none;margin-top:14px;background:#fff1f1;color:#9d2d2d;padding:12px;border-radius:12px} .dash{display:none}
+.name{font-size:22px;font-weight:900} .no{color:#6c8179;font-size:14px;margin-top:4px} .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.metric{padding:15px;border-radius:15px;background:#f5f9f7} .k{font-size:13px;color:#667b74} .v{font-size:18px;font-weight:900;margin-top:6px}
+.full{grid-column:1/-1} .note{font-size:12px;color:#86968f;margin-top:16px;line-height:1.6}
+</style>
 </head>
 <body>
 <main class="wrap">
-  <div class="top">
-    <div class="eyebrow">สหกรณ์การเกษตรโครงการหลวงพระบาทห้วยต้ม จำกัด</div>
-    <h1>ระบบสมาชิกออนไลน์</h1>
+<div class="eyebrow">สหกรณ์การเกษตรโครงการหลวงพระบาทห้วยต้ม จำกัด</div>
+<h1>ระบบสมาชิกออนไลน์</h1>
+
+<section class="card" id="verifyCard">
+  <div class="profile">
+    <img id="avatar" class="avatar" style="display:none">
+    <div><div class="pname" id="lineName">กำลังเชื่อมต่อ...</div><div class="ok" id="lineStatus">กำลังตรวจสอบ LINE</div></div>
   </div>
+  <h2>ยืนยันตัวตนสมาชิก</h2>
+  <label>เลขสมาชิก</label>
+  <input id="memberNo" inputmode="numeric" placeholder="เช่น 00125">
+  <label>PIN 4 หลัก</label>
+  <input id="pin4" type="password" inputmode="numeric" maxlength="4" placeholder="PIN 4 หลัก">
+  <button id="verifyBtn">ตรวจสอบข้อมูล</button>
+  <div id="errorBox" class="error"></div>
+  <div class="note">ระบบทดสอบ: ใช้เฉพาะข้อมูลจำลองใน Google Sheet</div>
+</section>
 
-  <section class="card" id="verifyCard">
-    <div class="profile">
-      <img id="avatar" class="avatar" alt="รูปโปรไฟล์" style="display:none">
-      <div id="fallback" class="fallback">สก.</div>
-      <div>
-        <div class="pname" id="lineName">กำลังเชื่อมต่อ...</div>
-        <div class="ok" id="lineStatus">กำลังตรวจสอบ LINE</div>
-      </div>
-    </div>
-
-    <div class="title">ยืนยันตัวตนสมาชิก</div>
-    <p class="sub">กรอกเลขสมาชิกและ PIN ทดสอบ เพื่อดึงข้อมูลจาก Google Sheet</p>
-
-    <label for="memberNo">เลขสมาชิก</label>
-    <input id="memberNo" inputmode="numeric" maxlength="10" placeholder="เช่น 00125" autocomplete="off">
-
-    <label for="pin4">PIN 4 หลัก</label>
-    <input id="pin4" inputmode="numeric" maxlength="4" type="password" placeholder="กรอก PIN 4 หลัก" autocomplete="off">
-
-    <button class="btn" id="verifyBtn">ตรวจสอบข้อมูล</button>
-    <div class="error" id="errorBox"></div>
-
-    <div class="notice">
-      ระบบนี้ยังเป็นต้นแบบทดสอบ กรุณาใช้เฉพาะข้อมูลจำลอง และอย่าใส่เลขบัตรประชาชนหรือข้อมูลการเงินจริงในขั้นนี้
-    </div>
-  </section>
-
-  <section class="card dash" id="dashCard">
-    <div class="title" style="margin-top:0">ข้อมูลสมาชิก</div>
-    <div class="member-name" id="fullName">-</div>
-    <div class="member-no">สมาชิกเลขที่ <span id="memberNoOut">-</span></div>
-
-    <div class="grid">
-      <div class="metric"><div class="k">หุ้น</div><div class="v" id="shares">-</div></div>
-      <div class="metric"><div class="k">เงินฝาก</div><div class="v" id="deposits">-</div></div>
-      <div class="metric"><div class="k">ยอดเงินกู้</div><div class="v" id="loanTotal">-</div></div>
-      <div class="metric"><div class="k">เงินกู้คงเหลือ</div><div class="v" id="loanBalance">-</div></div>
-      <div class="metric full"><div class="k">ผ่อนชำระต่องวด</div><div class="v" id="installment">-</div></div>
-    </div>
-
-    <button class="btn back" id="backBtn">กลับไปตรวจสมาชิกคนอื่น</button>
-    <div class="muted">ข้อมูลหน้านี้ดึงจาก Google Sheet ผ่าน Google Apps Script สำหรับการทดสอบระบบ</div>
-  </section>
+<section class="card dash" id="dashCard">
+  <div class="name" id="fullName"></div>
+  <div class="no">สมาชิกเลขที่ <span id="memberNoOut"></span></div>
+  <div class="grid">
+    <div class="metric"><div class="k">หุ้น</div><div class="v" id="shares"></div></div>
+    <div class="metric"><div class="k">เงินฝาก</div><div class="v" id="deposits"></div></div>
+    <div class="metric"><div class="k">ยอดเงินกู้</div><div class="v" id="loanTotal"></div></div>
+    <div class="metric"><div class="k">เงินกู้คงเหลือ</div><div class="v" id="loanBalance"></div></div>
+    <div class="metric full"><div class="k">ผ่อนชำระต่องวด</div><div class="v" id="installment"></div></div>
+  </div>
+  <button id="backBtn">กลับ</button>
+</section>
 </main>
 
 <script>
-const LIFF_ID = "2011752168-pyUAW8vD";
-const API_URL = "https://script.google.com/macros/s/AKfycbxfjJ1KljziRQUMb_XNiTMM11Dre9ggzN8Obxx9Nh76aPYJnwJ17bFPy7PPvphNP5Jhtg/exec";
+const LIFF_ID="2011752168-pyUAW8vD";
+const API_URL="https://script.google.com/macros/s/AKfycbyd5Fy3HxTdAtibupIILWHUer0lCCJq-u8FVJDsvoYBY1PFkMVXvM3o2UKQaixL6obnDQ/exec";
 
-function formatMoney(value) {
-  const raw = String(value ?? "").replace(/,/g, "").trim();
-  const n = Number(raw);
-  if (!raw || Number.isNaN(n)) return value || "-";
-  return new Intl.NumberFormat("th-TH", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(n) + " บาท";
+function money(v) {
+  const n=Number(String(v??"").replace(/,/g,""));
+  return Number.isFinite(n) ? n.toLocaleString("th-TH",{minimumFractionDigits:2,maximumFractionDigits:2})+" บาท" : (v||"-");
+}
+function shares(v) {
+  const n=Number(String(v??"").replace(/,/g,""));
+  return Number.isFinite(n) ? n.toLocaleString("th-TH")+" หุ้น" : (v||"-");
 }
 
-function formatShares(value) {
-  const raw = String(value ?? "").replace(/,/g, "").trim();
-  const n = Number(raw);
-  if (!raw || Number.isNaN(n)) return value || "-";
-  return new Intl.NumberFormat("th-TH", {maximumFractionDigits: 2}).format(n) + " หุ้น";
-}
-
-async function initLiff() {
-  const lineName = document.getElementById("lineName");
-  const lineStatus = document.getElementById("lineStatus");
-  const avatar = document.getElementById("avatar");
-  const fallback = document.getElementById("fallback");
-
-  try {
-    await liff.init({ liffId: LIFF_ID });
-    if (!liff.isLoggedIn()) {
-      liff.login();
-      return;
-    }
-    const profile = await liff.getProfile();
-    lineName.textContent = profile.displayName || "สมาชิก LINE";
-    lineStatus.textContent = "เชื่อมต่อ LINE สำเร็จ";
-    if (profile.pictureUrl) {
-      avatar.src = profile.pictureUrl;
-      avatar.style.display = "block";
-    } else {
-      fallback.style.display = "flex";
-    }
-  } catch (e) {
-    lineName.textContent = "เปิดระบบสมาชิก";
-    lineStatus.textContent = "กรุณาเปิดผ่าน LIFF URL";
-    fallback.style.display = "flex";
+async function initLiff(){
+  try{
+    await liff.init({liffId:LIFF_ID});
+    if(!liff.isLoggedIn()){liff.login();return;}
+    const p=await liff.getProfile();
+    document.getElementById("lineName").textContent=p.displayName||"สมาชิก LINE";
+    document.getElementById("lineStatus").textContent="เชื่อมต่อ LINE สำเร็จ";
+    if(p.pictureUrl){const a=document.getElementById("avatar");a.src=p.pictureUrl;a.style.display="block";}
+  }catch(e){
+    document.getElementById("lineName").textContent="ระบบสมาชิก";
+    document.getElementById("lineStatus").textContent="กรุณาเปิดผ่าน LINE";
   }
 }
 
-function jsonpRequest(memberNo, pin4) {
-  return new Promise((resolve, reject) => {
-    const cb = "__coop_cb_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-    const script = document.createElement("script");
-    let timer;
-
-    const cleanup = () => {
-      clearTimeout(timer);
-      delete window[cb];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    };
-
-    window[cb] = (data) => {
-      cleanup();
-      resolve(data);
-    };
-
-    const qs = new URLSearchParams({
-      member_no: memberNo,
-      pin4: pin4,
-      callback: cb
-    });
-
-    script.src = API_URL + "?" + qs.toString();
-    script.onerror = () => {
-      cleanup();
-      reject(new Error("เชื่อมต่อ Google Apps Script ไม่สำเร็จ"));
-    };
-
-    timer = setTimeout(() => {
-      cleanup();
-      reject(new Error("หมดเวลารอข้อมูล กรุณาลองใหม่"));
-    }, 15000);
-
-    document.body.appendChild(script);
+function jsonp(memberNo,pin4){
+  return new Promise((resolve,reject)=>{
+    const cb="coop_"+Date.now()+"_"+Math.floor(Math.random()*99999);
+    const s=document.createElement("script");
+    const cleanup=()=>{delete window[cb]; if(s.parentNode)s.parentNode.removeChild(s);};
+    window[cb]=(d)=>{cleanup();resolve(d);};
+    const q=new URLSearchParams({member_no:memberNo,pin4:pin4,callback:cb});
+    s.src=API_URL+"?"+q.toString();
+    s.onerror=()=>{cleanup();reject(new Error("เชื่อมต่อฐานข้อมูลไม่สำเร็จ"));};
+    document.body.appendChild(s);
   });
 }
 
-document.getElementById("verifyBtn").addEventListener("click", async () => {
-  const memberNo = document.getElementById("memberNo").value.trim();
-  const pin4 = document.getElementById("pin4").value.trim();
-  const errorBox = document.getElementById("errorBox");
-  const btn = document.getElementById("verifyBtn");
+document.getElementById("verifyBtn").onclick=async()=>{
+  const memberNo=document.getElementById("memberNo").value.trim();
+  const pin4=document.getElementById("pin4").value.trim();
+  const err=document.getElementById("errorBox");
+  const btn=document.getElementById("verifyBtn");
+  err.style.display="none";
+  if(!memberNo || !/^\d{4}$/.test(pin4)){err.textContent="กรุณากรอกเลขสมาชิกและ PIN 4 หลัก";err.style.display="block";return;}
+  btn.disabled=true;btn.textContent="กำลังตรวจสอบ...";
+  try{
+    const d=await jsonp(memberNo,pin4);
+    if(!d.success) throw new Error(d.message||"ไม่พบข้อมูล");
+    const m=d.member;
+    document.getElementById("fullName").textContent=m.full_name;
+    document.getElementById("memberNoOut").textContent=m.member_no;
+    document.getElementById("shares").textContent=shares(m.shares);
+    document.getElementById("deposits").textContent=money(m.deposits);
+    document.getElementById("loanTotal").textContent=money(m.loan_total);
+    document.getElementById("loanBalance").textContent=money(m.loan_balance);
+    document.getElementById("installment").textContent=money(m.installment);
+    document.getElementById("verifyCard").style.display="none";
+    document.getElementById("dashCard").style.display="block";
+  }catch(e){err.textContent=e.message;err.style.display="block";}
+  finally{btn.disabled=false;btn.textContent="ตรวจสอบข้อมูล";}
+};
 
-  errorBox.style.display = "none";
-
-  if (!memberNo || !/^\d+$/.test(memberNo)) {
-    errorBox.textContent = "กรุณากรอกเลขสมาชิกให้ถูกต้อง";
-    errorBox.style.display = "block";
-    return;
-  }
-
-  if (!/^\d{4}$/.test(pin4)) {
-    errorBox.textContent = "กรุณากรอก PIN 4 หลัก";
-    errorBox.style.display = "block";
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = "กำลังตรวจสอบ...";
-
-  try {
-    const data = await jsonpRequest(memberNo, pin4);
-
-    if (!data || !data.success || !data.member) {
-      throw new Error((data && data.message) || "ไม่พบข้อมูลสมาชิก");
-    }
-
-    const m = data.member;
-    document.getElementById("fullName").textContent = m.full_name || "-";
-    document.getElementById("memberNoOut").textContent = m.member_no || "-";
-    document.getElementById("shares").textContent = formatShares(m.shares);
-    document.getElementById("deposits").textContent = formatMoney(m.deposits);
-    document.getElementById("loanTotal").textContent = formatMoney(m.loan_total);
-    document.getElementById("loanBalance").textContent = formatMoney(m.loan_balance);
-    document.getElementById("installment").textContent = formatMoney(m.installment);
-
-    document.getElementById("verifyCard").style.display = "none";
-    document.getElementById("dashCard").style.display = "block";
-    window.scrollTo({top:0, behavior:"smooth"});
-  } catch (err) {
-    errorBox.textContent = err.message || "เกิดข้อผิดพลาด กรุณาลองใหม่";
-    errorBox.style.display = "block";
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "ตรวจสอบข้อมูล";
-  }
-});
-
-document.getElementById("backBtn").addEventListener("click", () => {
-  document.getElementById("dashCard").style.display = "none";
-  document.getElementById("verifyCard").style.display = "block";
-  document.getElementById("pin4").value = "";
-  window.scrollTo({top:0, behavior:"smooth"});
-});
+document.getElementById("backBtn").onclick=()=>{
+  document.getElementById("dashCard").style.display="none";
+  document.getElementById("verifyCard").style.display="block";
+  document.getElementById("pin4").value="";
+};
 
 initLiff();
 </script>
