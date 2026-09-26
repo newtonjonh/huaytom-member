@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ระบบสมาชิกสหกรณ์พระบาทห้วยต้ม</title>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI","Noto Sans Thai",Tahoma,sans-serif;
+      background:#f3f7f5;
+      color:#17332b;
+    }
+    .wrap{max-width:520px;margin:0 auto;padding:24px 18px 40px}
+    .top{padding:14px 2px 10px}
+    .eyebrow{font-size:13px;color:#55736a;margin-bottom:6px}
+    h1{font-size:23px;line-height:1.35;margin:0}
+    .card{
+      background:#fff;
+      border-radius:20px;
+      padding:22px;
+      margin-top:18px;
+      box-shadow:0 10px 28px rgba(28,62,52,.08);
+    }
+    .loading{color:#61756e;line-height:1.7}
+    .profile{display:none}
+    .avatar{
+      width:76px;height:76px;border-radius:50%;
+      object-fit:cover;background:#e5ece9;margin-bottom:12px;
+    }
+    .fallback{
+      width:76px;height:76px;border-radius:50%;
+      background:#e5ece9;display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:24px;margin-bottom:12px;
+    }
+    .name{font-size:21px;font-weight:800;margin:0 0 5px}
+    .ok{
+      display:inline-block;margin-top:8px;padding:7px 12px;
+      border-radius:999px;background:#e8f7ef;color:#14734d;
+      font-size:13px;font-weight:700;
+    }
+    .note{font-size:14px;line-height:1.65;color:#60746d;margin-top:16px}
+    .error{
+      display:none;background:#fff1f1;color:#9d2d2d;border-radius:14px;
+      padding:14px;line-height:1.55;margin-top:14px;
+    }
+    .btn{
+      width:100%;border:0;border-radius:13px;padding:13px 14px;
+      font-size:16px;font-weight:700;cursor:pointer;margin-top:14px;
+      background:#176b52;color:white;
+    }
+    .small{font-size:12px;color:#82938d;margin-top:18px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top">
+      <div class="eyebrow">สหกรณ์การเกษตรโครงการหลวงพระบาทห้วยต้ม จำกัด</div>
+      <h1>ระบบสมาชิกออนไลน์</h1>
+    </div>
+
+    <section class="card">
+      <div id="loading" class="loading">กำลังเชื่อมต่อกับบัญชี LINE ของคุณ...</div>
+
+      <div id="profile" class="profile">
+        <img id="avatar" class="avatar" alt="รูปโปรไฟล์" style="display:none">
+        <div id="fallback" class="fallback" style="display:none">สก.</div>
+        <p class="name" id="displayName">สมาชิก</p>
+        <span class="ok">เชื่อมต่อ LINE สำเร็จ</span>
+
+        <p class="note">
+          ขั้นต่อไปจะเป็นการยืนยันตัวตนด้วยเลขสมาชิกและข้อมูลที่สหกรณ์กำหนด
+          ก่อนอนุญาตให้ดูหุ้น เงินฝาก เงินกู้ และการชำระเงิน
+        </p>
+      </div>
+
+      <div id="error" class="error"></div>
+      <button id="loginBtn" class="btn" style="display:none">เข้าสู่ระบบด้วย LINE</button>
+
+      <div class="small">หน้านี้เป็นระบบทดสอบ ยังไม่แสดงข้อมูลการเงินจริงของสมาชิก</div>
+    </section>
+  </main>
+
+<script>
+const LIFF_ID = "2011752168-pyUAW8vD";
+
+const loading = document.getElementById("loading");
+const profileBox = document.getElementById("profile");
+const errorBox = document.getElementById("error");
+const loginBtn = document.getElementById("loginBtn");
+const displayName = document.getElementById("displayName");
+const avatar = document.getElementById("avatar");
+const fallback = document.getElementById("fallback");
+
+function showError(message) {
+  loading.style.display = "none";
+  profileBox.style.display = "none";
+  errorBox.style.display = "block";
+  errorBox.textContent = message;
+}
+
+async function start() {
+  try {
+    await liff.init({
+      liffId: LIFF_ID,
+      withLoginOnExternalBrowser: false
+    });
+
+    if (!liff.isLoggedIn()) {
+      loading.textContent = "ยังไม่ได้เข้าสู่ระบบ LINE";
+      loginBtn.style.display = "block";
+      return;
+    }
+
+    const profile = await liff.getProfile();
+    displayName.textContent = profile.displayName || "สมาชิก";
+
+    if (profile.pictureUrl) {
+      avatar.src = profile.pictureUrl;
+      avatar.style.display = "block";
+    } else {
+      fallback.style.display = "flex";
+    }
+
+    loading.style.display = "none";
+    profileBox.style.display = "block";
+  } catch (err) {
+    console.error(err);
+    showError("เชื่อมต่อ LIFF ไม่สำเร็จ กรุณาตรวจสอบ Endpoint URL และการตั้งค่า Scope แล้วลองอีกครั้ง");
+  }
+}
+
+loginBtn.addEventListener("click", () => {
+  try {
+    liff.login();
+  } catch (err) {
+    showError("ไม่สามารถเปิดหน้าล็อกอิน LINE ได้");
+  }
+});
+
+start();
+</script>
+</body>
+</html>
